@@ -1,60 +1,84 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<?php
+include '../class/dbConnection.php';
+$pdo = DbConnection::open();
+?>
 
-<head>
-    <meta charset="utf-8">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <title>Adicionar Contato</title>
-</head>
+<?php
+include('../partials/header.php');
+?>
 
-<body>
-    <div class="container">
+<div class="container">
 
-        <div class="row">
+    <br>
+
+    <div>
+        <div class="m3">
             <p>
-                <a href="create.php" class="btn btn-success">Adicionar</a>
+                <a href="../index.php" class="btn btn-danger">Back</a>
+                <a href="create.php" class="btn btn-success">Add</a>
             </p>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Endereço</th>
-                        <th scope="col">Telefone</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Sexo</th>
-                        <th scope="col">Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    include '../class/dbConnection.php';
-                    $pdo = DbConnection::open();
-                    $sql = 'SELECT * FROM pessoa ORDER BY id DESC';
-
-                    foreach ($pdo->query($sql) as $row) {
-                        echo '<tr>';
-                        echo '<th scope="row">' . $row['id'] . '</th>';
-                        echo '<td>' . $row['nome'] . '</td>';
-                        echo '<td>' . $row['endereco'] . '</td>';
-                        echo '<td>' . $row['telefone'] . '</td>';
-                        echo '<td>' . $row['email'] . '</td>';
-                        echo '<td>' . $row['sexo'] . '</td>';
-                        echo '<td width=250>';
-                        echo '<a class="btn btn-primary" href="read.php?id=' . $row['id'] . '">Info</a>';
-                        echo ' ';
-                        echo '<a class="btn btn-warning" href="update.php?id=' . $row['id'] . '">Atualizar</a>';
-                        echo ' ';
-                        echo '<a class="btn btn-danger" href="delete.php?id=' . $row['id'] . '">Excluir</a>';
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                    DbConnection::close();
-                    ?>
-                </tbody>
-            </table>
         </div>
-
     </div>
+
+    <br>
+
+    <div class="row">
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Endereço</th>
+                    <th scope="col">CEP</th>
+                    <th scope="col">Celular</th>
+                    <th scope="col">Residencial</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Sexo</th>
+                    <th scope="col">Observações</th>
+                    <th scope="col">Data do Cadastro</th>
+                    <th scope="col">#</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = 'SELECT * FROM pessoa ORDER BY id DESC';
+
+                foreach ($pdo->query($sql) as $row) {
+
+                    echo '<tr>';
+                    echo '<th scope="row">' . $row['Id'] . '</th>';
+                    echo '<td>' . $row['Nome'] . '</td>';
+                    echo '<td>' . $row['Endereco'] . '</td>';
+                    echo '<td>' . $row['Cep'] . '</td>';
+                    echo '<td>' . $row['TelefoneCelular'] . '</td>';
+                    echo '<td>' . $row['TelefoneResidencial'] . '</td>';
+                    echo '<td>' . $row['Email'] . '</td>';
+                    echo '<td>' . $row['Sexo'] . '</td>';
+                    echo '<td>' . $row['Observacoes'] . '</td>';
+                    echo '<td>' . $row['DataCadastro'] . '</td>';
+
+                    echo '<td width=250>';
+                    echo '<div class="m3"><a class="btn btn-primary" style="width:150px" href="read.php?id=' . $row['Id'] . '">Info</a></div>';
+                    echo '<br>';
+                    echo '<div class="m3"><a class="btn btn-warning" style="width:150px" href="update.php?id=' . $row['Id'] . '">Update</a></div>';
+                    echo '<br>';
+                    echo '<div class="m3"><a class="btn btn-danger" style="width:150px" href="delete.php?id=' . $row['Id'] . '">Delete</a></div>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+
+                ?>
+            </tbody>
+        </table>
+    </div>
+
+</div>
 </body>
+
+<?php
+DbConnection::close();
+?>
+
+<?php
+include('../partials/footer.php');
+?>

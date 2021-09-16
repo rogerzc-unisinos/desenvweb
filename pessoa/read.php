@@ -6,7 +6,7 @@ if (!empty($_GET['id'])) {
 }
 
 if (null == $id) {
-    header("Location: index.php");
+    header("Location: ../index.php");
 } else {
     $pdo = DbConnection::open();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -18,17 +18,10 @@ if (null == $id) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
+<?php
+include('../partials/header.php');
+?>
 
-<head>
-    <meta charset="utf-8">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <title>Informações do Contato</title>
-</head>
-
-<body>
 <div class="container">
     <div class="span10 offset1">
         <div class="card">
@@ -41,7 +34,7 @@ if (null == $id) {
                         <label class="control-label">Nome</label>
                         <div class="controls form-control">
                             <label class="carousel-inner">
-                                <?php echo $data['nome']; ?>
+                                <?php echo $data['Nome']; ?>
                             </label>
                         </div>
                     </div>
@@ -50,16 +43,34 @@ if (null == $id) {
                         <label class="control-label">Endereço</label>
                         <div class="controls form-control disabled">
                             <label class="carousel-inner">
-                                <?php echo $data['endereco']; ?>
+                                <?php echo $data['Endereco']; ?>
                             </label>
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label">Telefone</label>
+                        <label class="control-label">CEP</label>
                         <div class="controls form-control disabled">
                             <label class="carousel-inner">
-                                <?php echo $data['telefone']; ?>
+                                <?php echo $data['Cep']; ?>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Celular</label>
+                        <div class="controls form-control disabled">
+                            <label class="carousel-inner">
+                                <?php echo $data['TelefoneCelular']; ?>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Residencial</label>
+                        <div class="controls form-control disabled">
+                            <label class="carousel-inner">
+                                <?php echo $data['TelefoneResidencial']; ?>
                             </label>
                         </div>
                     </div>
@@ -68,7 +79,7 @@ if (null == $id) {
                         <label class="control-label">Email</label>
                         <div class="controls form-control disabled">
                             <label class="carousel-inner">
-                                <?php echo $data['email']; ?>
+                                <?php echo $data['Email']; ?>
                             </label>
                         </div>
                     </div>
@@ -77,26 +88,32 @@ if (null == $id) {
                         <label class="control-label">Sexo</label>
                         <div class="controls form-check disabled">
                             <label class="carousel-inner">
-                                <?php echo $data['sexo']; ?>
+                                <?php echo $data['Sexo']; ?>
                             </label>
                         </div>
                     </div>
-                    <br/>
-                    <div class="form-actions">
-                        <a href="index.php" type="btn" class="btn btn-default">Voltar</a>
+
+                    <div class="control-group">
+                        <label class="control-label">Observações</label>
+                        <div class="controls form-check disabled">
+                            <label class="carousel-inner">
+                                <?php echo $data['Observacoes']; ?>
+                            </label>
+                        </div>
                     </div>
+
+
+                    <div class="form-actions">
+                        <a href="list.php" type="btn" class="btn btn-danger">Back</a>
+                    </div>
+
+                    <br />
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="assets/js/bootstrap.min.js"></script>
-</body>
 
-</html>
+<?php
+include('../partials/footer.php');
+?>

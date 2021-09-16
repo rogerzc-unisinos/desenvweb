@@ -8,24 +8,26 @@ if (!empty($_GET['id'])) {
 }
 
 if (null == $id) {
-    header("Location: index.php");
+    header("Location: ../index.php");
 }
 
 if (!empty($_POST)) {
 
     $nomeErro = null;
     $enderecoErro = null;
-    $telefoneErro = null;
+    $telefoneCelularErro = null;
     $emailErro = null;
     $sexoErro = null;
 
     $nome = $_POST['nome'];
     $endereco = $_POST['endereco'];
-    $telefone = $_POST['telefone'];
+    $cep = $_POST['cep'];
+    $telefoneCelular = $_POST['telefoneCelular'];
+    $telefoneResidencial = $_POST['telefoneResidencial'];
     $email = $_POST['email'];
     $sexo = $_POST['sexo'];
+    $observacoes = $_POST['observacoes'];
 
-    //Validação
     $validacao = true;
     if (empty($nome)) {
         $nomeErro = 'Por favor digite o nome!';
@@ -45,8 +47,13 @@ if (!empty($_POST)) {
         $validacao = false;
     }
 
-    if (empty($telefone)) {
-        $telefoneErro = 'Por favor digite o telefone!';
+    if (empty($cep)) {
+        $cepErro = 'Por favor digite o CEP!';
+        $validacao = false;
+    }
+
+    if (empty($telefoneCelular)) {
+        $telefoneCelularErro = 'Por favor digite o telefone celular!';
         $validacao = false;
     }
 
@@ -55,15 +62,14 @@ if (!empty($_POST)) {
         $validacao = false;
     }
 
-    // update data
     if ($validacao) {
         $pdo = DbConnection::open();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "UPDATE pessoa  set nome = ?, endereco = ?, telefone = ?, email = ?, sexo = ? WHERE id = ?";
+        $sql = "UPDATE pessoa  set Nome = ?, Endereco = ?, Cep = ?, TelefoneCelular = ?, TelefoneResidencial = ?, Email = ?, Sexo = ?, Observacoes = ? WHERE Id = ?";
         $q = $pdo->prepare($sql);
-        $q->execute(array($nome, $endereco, $telefone, $email, $sexo, $id));
+        $q->execute(array($nome, $endereco, $cep, $telefoneCelular, $telefoneResidencial, $email, $sexo, $observacoes, $id));
         DbConnection::close();
-        header("Location: index.php");
+        header("Location: list.php");
     }
 } else {
     $pdo = DbConnection::open();
@@ -72,30 +78,24 @@ if (!empty($_POST)) {
     $q = $pdo->prepare($sql);
     $q->execute(array($id));
     $data = $q->fetch(PDO::FETCH_ASSOC);
-    $nome = $data['nome'];
-    $endereco = $data['endereco'];
-    $telefone = $data['telefone'];
-    $email = $data['email'];
-    $sexo = $data['sexo'];
+
+    $nome = $data['Nome'];
+    $endereco = $data['Endereco'];
+    $cep = $data['Cep'];
+    $telefoneCelular = $data['TelefoneCelular'];
+    $telefoneResidencial = $data['TelefoneResidencial'];
+    $email = $data['Email'];
+    $sexo = $data['Sexo'];
+    $observacoes = $data['Observacoes'];
+
     DbConnection::close();
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="pt-br">
+<?php
+include('../partials/header.php');
+?>
 
-<head>
-    <meta charset="utf-8">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <!-- using new bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <title>Atualizar Contato</title>
-</head>
-
-<body>
 <div class="container">
 
     <div class="span10 offset1">
@@ -109,9 +109,8 @@ if (!empty($_POST)) {
                     <div class="control-group <?php echo !empty($nomeErro) ? 'error' : ''; ?>">
                         <label class="control-label">Nome</label>
                         <div class="controls">
-                            <input name="nome" class="form-control" size="50" type="text" placeholder="Nome"
-                                   value="<?php echo !empty($nome) ? $nome : ''; ?>">
-                            <?php if (!empty($nomeErro)): ?>
+                            <input name="nome" class="form-control" size="100" type="text" placeholder="Nome" value="<?php echo !empty($nome) ? $nome : ''; ?>">
+                            <?php if (!empty($nomeErro)) : ?>
                                 <span class="text-danger"><?php echo $nomeErro; ?></span>
                             <?php endif; ?>
                         </div>
@@ -120,21 +119,40 @@ if (!empty($_POST)) {
                     <div class="control-group <?php echo !empty($enderecoErro) ? 'error' : ''; ?>">
                         <label class="control-label">Endereço</label>
                         <div class="controls">
-                            <input name="endereco" class="form-control" size="80" type="text" placeholder="Endereço"
-                                   value="<?php echo !empty($endereco) ? $endereco : ''; ?>">
-                            <?php if (!empty($enderecoErro)): ?>
+                            <input name="endereco" class="form-control" size="150" type="text" placeholder="Endereço" value="<?php echo !empty($endereco) ? $endereco : ''; ?>">
+                            <?php if (!empty($enderecoErro)) : ?>
                                 <span class="text-danger"><?php echo $enderecoErro; ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
 
-                    <div class="control-group <?php echo !empty($telefoneErro) ? 'error' : ''; ?>">
-                        <label class="control-label">Telefone</label>
+
+                    <div class="control-group <?php echo !empty($cepErro) ? 'error' : ''; ?>">
+                        <label class="control-label">CEP</label>
                         <div class="controls">
-                            <input name="telefone" class="form-control" size="30" type="text" placeholder="Telefone"
-                                   value="<?php echo !empty($telefone) ? $telefone : ''; ?>">
-                            <?php if (!empty($telefoneErro)): ?>
-                                <span class="text-danger"><?php echo $telefoneErro; ?></span>
+                            <input name="cep" class="form-control" size="7" type="text" placeholder="CEP" value="<?php echo !empty($cep) ? $cep : ''; ?>">
+                            <?php if (!empty($cepErro)) : ?>
+                                <span class="text-danger"><?php echo $cepErro; ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="control-group <?php echo !empty($telefoneCelularErro) ? 'error' : ''; ?>">
+                        <label class="control-label">Celular</label>
+                        <div class="controls">
+                            <input name="telefoneCelular" class="form-control" size="13" type="text" placeholder="Telefone Celular" value="<?php echo !empty($telefoneCelular) ? $telefoneCelular : ''; ?>">
+                            <?php if (!empty($telefoneCelularErro)) : ?>
+                                <span class="text-danger"><?php echo $telefoneCelularErro; ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="control-group <?php echo !empty($telefoneResidencialErro) ? 'error' : ''; ?>">
+                        <label class="control-label">Residencial</label>
+                        <div class="controls">
+                            <input name="telefoneResidencial" class="form-control" size="13" type="text" placeholder="Telefone Residencial" value="<?php echo !empty($telefoneResidencial) ? $telefoneResidencial : ''; ?>">
+                            <?php if (!empty($telefoneResidencialErro)) : ?>
+                                <span class="text-danger"><?php echo $telefoneResidencialErro; ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -142,9 +160,8 @@ if (!empty($_POST)) {
                     <div class="control-group <?php echo !empty($emailErro) ? 'error' : ''; ?>">
                         <label class="control-label">Email</label>
                         <div class="controls">
-                            <input name="email" class="form-control" size="40" type="text" placeholder="Email"
-                                   value="<?php echo !empty($email) ? $email : ''; ?>">
-                            <?php if (!empty($emailErro)): ?>
+                            <input name="email" class="form-control" size="150" type="text" placeholder="Email" value="<?php echo !empty($email) ? $email : ''; ?>">
+                            <?php if (!empty($emailErro)) : ?>
                                 <span class="text-danger"><?php echo $emailErro; ?></span>
                             <?php endif; ?>
                         </div>
@@ -155,37 +172,39 @@ if (!empty($_POST)) {
                         <div class="controls">
                             <div class="form-check">
                                 <p class="form-check-label">
-                                    <input class="form-check-input" type="radio" name="sexo" id="sexo"
-                                           value="M" <?php echo ($sexo == "M") ? "checked" : null; ?>/> Masculino
+                                    <input class="form-check-input" type="radio" name="sexo" id="sexo" value="M" <?php echo ($sexo == "M") ? "checked" : null; ?> /> Masculino
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sexo" id="sexo"
-                                       value="F" <?php echo ($sexo == "F") ? "checked" : null; ?>/> Feminino
+                                <input class="form-check-input" type="radio" name="sexo" id="sexo" value="F" <?php echo ($sexo == "F") ? "checked" : null; ?> /> Feminino
                             </div>
                             </p>
-                            <?php if (!empty($sexoErro)): ?>
+                            <?php if (!empty($sexoErro)) : ?>
                                 <span class="text-danger"><?php echo $sexoErro; ?></span>
                             <?php endif; ?>
                         </div>
                     </div>
 
-                    <br/>
+                    <div class="control-group <?php echo !empty($observacoesErro) ? 'error' : ''; ?>">
+                        <label class="control-label">Observações</label>
+                        <div class="controls">
+                            <input name="observacoes" class="form-control" size="250" type="text" placeholder="Observações. máx 250 caracteres" value="<?php echo !empty($observacoes) ? $observacoes : ''; ?>">
+                            <?php if (!empty($observacoesErro)) : ?>
+                                <span class="text-danger"><?php echo $observacoesErro; ?></span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <br />
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-warning">Atualizar</button>
-                        <a href="index.php" type="btn" class="btn btn-default">Voltar</a>
+                        <button type="submit" class="btn btn-warning">Update</button>
+                        <a href="list.php" type="btn" class="btn btn-danger">Back</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="assets/js/bootstrap.min.js"></script>
-</body>
 
-</html>
+<?php
+include('../partials/footer.php');
+?>
