@@ -1,10 +1,10 @@
 <?php
-include '../class/dbConnection.php';
-$pdo = DbConnection::open();
+include('../partials/header.php');
 ?>
 
 <?php
-include('../partials/header.php');
+include '../class/dbConnection.php';
+$pdo = DbConnection::open();
 ?>
 
 <div class="container">
@@ -62,7 +62,11 @@ include('../partials/header.php');
                     echo '<br>';
                     echo '<div class="m3"><a class="btn btn-warning" style="width:150px" href="update.php?id=' . $row['Id'] . '">Update</a></div>';
                     echo '<br>';
+
+                    if($_SESSION['tipoUsuario'] == '0'){
                     echo '<div class="m3"><a class="btn btn-danger" style="width:150px" href="delete.php?id=' . $row['Id'] . '">Delete</a></div>';
+                    }
+
                     echo '</td>';
                     echo '</tr>';
                 }

@@ -1,4 +1,8 @@
 <?php
+include('../partials/header.php');
+?>
+
+<?php
 require '../class/dbConnection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -69,11 +73,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: list.php");
     }
 }
-?>
-
-
-<?php
-include('../partials/header.php');
 ?>
 
 <div class="container">

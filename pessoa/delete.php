@@ -1,4 +1,13 @@
 <?php
+include('../partials/header.php');
+?>
+
+<?php
+
+if($_SESSION['tipoUsuario'] <> '0'){
+    header('Location: list.php');
+}
+
 require '../class/dbConnection.php';
 
 $id = 0;
@@ -18,10 +27,6 @@ if (!empty($_POST)) {
     DbConnection::close();
     header("Location: list.php");
 }
-?>
-
-<?php
-include('../partials/header.php');
 ?>
 
 <div class="container">

@@ -1,4 +1,8 @@
 <?php
+include('../partials/header.php');
+?>
+
+<?php
 require '../class/dbConnection.php';
 $id = null;
 if (!empty($_GET['id'])) {
@@ -16,10 +20,6 @@ if (null == $id) {
     $data = $q->fetch(PDO::FETCH_ASSOC);
     DbConnection::close();
 }
-?>
-
-<?php
-include('../partials/header.php');
 ?>
 
 <div class="container">

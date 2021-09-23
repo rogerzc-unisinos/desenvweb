@@ -1,4 +1,8 @@
 <?php
+include('../partials/header.php');
+?>
+
+<?php
 
 require '../class/dbConnection.php';
 
@@ -90,10 +94,6 @@ if (!empty($_POST)) {
 
     DbConnection::close();
 }
-?>
-
-<?php
-include('../partials/header.php');
 ?>
 
 <div class="container">
